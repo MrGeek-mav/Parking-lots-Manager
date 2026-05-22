@@ -1,0 +1,11 @@
+.idea
+.pio
+.vscode
+*.pyc
+__pycache__
+*.log
+*.tmp
+*.bak
+*.swp
+.DS_Store
+.venv    
