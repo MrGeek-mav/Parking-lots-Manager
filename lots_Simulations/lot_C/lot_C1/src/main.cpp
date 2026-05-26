@@ -12,8 +12,6 @@
 #define ECHO4 22
 #define TRIG5 13 // usc5
 #define ECHO5 23
-#define TRIG6 12 // usc6
-#define ECHO6 25
 
 const char *ssid = "Wokwi-GUEST";
 const char *password = "";
@@ -43,14 +41,13 @@ String buildJSON()
   d[2] = medirDistancia(TRIG3, ECHO3);
   d[3] = medirDistancia(TRIG4, ECHO4);
   d[4] = medirDistancia(TRIG5, ECHO5);
-  d[5] = medirDistancia(TRIG6, ECHO6);
 
-  String json = "{\n  \"titulo\": \"AREA A\",\n  \"sensores\": [\n";
-  for (int i = 0; i < 6; i++)
+  String json = "{\n  \"titulo\": \"AREA C1\",\n  \"sensores\": [\n";
+  for (int i = 0; i < 5; i++)
   {
     json += "    { \"id\": \"usc" + String(i + 1) + "\", \"distancia_cm\": ";
     json += (d[i] < 0 ? "null" : String(d[i], 1));
-    json += (i < 5 ? " },\n" : " }\n");
+    json += (i < 4 ? " },\n" : " }\n");
   }
   json += "  ]\n}";
   return json;
@@ -79,9 +76,9 @@ void setup()
 {
   Serial.begin(115200);
 
-  int trigs[] = {TRIG1, TRIG2, TRIG3, TRIG4, TRIG5, TRIG6};
-  int echos[] = {ECHO1, ECHO2, ECHO3, ECHO4, ECHO5, ECHO6};
-  for (int i = 0; i < 6; i++)
+  int trigs[] = {TRIG1, TRIG2, TRIG3, TRIG4, TRIG5};
+  int echos[] = {ECHO1, ECHO2, ECHO3, ECHO4, ECHO5};
+  for (int i = 0; i < 5; i++)
   {
     pinMode(trigs[i], OUTPUT);
     pinMode(echos[i], INPUT);

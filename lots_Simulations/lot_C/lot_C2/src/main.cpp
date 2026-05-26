@@ -45,7 +45,7 @@ String buildJSON()
   d[4] = medirDistancia(TRIG5, ECHO5);
   d[5] = medirDistancia(TRIG6, ECHO6);
 
-  String json = "{\n  \"titulo\": \"AREA A\",\n  \"sensores\": [\n";
+  String json = "{\n  \"titulo\": \"AREA B1\",\n  \"sensores\": [\n";
   for (int i = 0; i < 6; i++)
   {
     json += "    { \"id\": \"usc" + String(i + 1) + "\", \"distancia_cm\": ";

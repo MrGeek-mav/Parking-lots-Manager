@@ -44,13 +44,6 @@
       "top": -100.53,
       "left": 1000.5,
       "attrs": {}
-    },
-    {
-      "type": "wokwi-hc-sr04",
-      "id": "usc6",
-      "top": -100.53,
-      "left": 1200.5,
-      "attrs": {}
     }
   ],
   "connections": [
@@ -220,38 +213,6 @@
     ],
     [
       "usc5:GND",
-      "esp:GND.1",
-      "black",
-      [
-        "v0"
-      ]
-    ],
-    [
-      "usc6:TRIG",
-      "esp:D12",
-      "green",
-      [
-        "v0"
-      ]
-    ],
-    [
-      "usc6:ECHO",
-      "esp:D25",
-      "blue",
-      [
-        "v0"
-      ]
-    ],
-    [
-      "usc6:VCC",
-      "esp:3V3",
-      "red",
-      [
-        "v0"
-      ]
-    ],
-    [
-      "usc6:GND",
       "esp:GND.1",
       "black",
       [
