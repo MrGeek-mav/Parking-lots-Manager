@@ -1,0 +1,223 @@
+{
+  "version": 1,
+  "author": "Uri Shaked",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "wokwi-esp32-devkit-v1",
+      "id": "esp",
+      "top": 0,
+      "left": 0,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-hc-sr04",
+      "id": "usc1",
+      "top": -100.53,
+      "left": 200.5,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-hc-sr04",
+      "id": "usc2",
+      "top": -100.53,
+      "left": 400.5,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-hc-sr04",
+      "id": "usc3",
+      "top": -100.53,
+      "left": 600.5,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-hc-sr04",
+      "id": "usc4",
+      "top": -100.53,
+      "left": 800.5,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-hc-sr04",
+      "id": "usc5",
+      "top": -100.53,
+      "left": 1000.5,
+      "attrs": {}
+    }
+  ],
+  "connections": [
+    [
+      "esp:TX0",
+      "$serialMonitor:RX",
+      "",
+      []
+    ],
+    [
+      "esp:RX0",
+      "$serialMonitor:TX",
+      "",
+      []
+    ],
+    [
+      "usc1:TRIG",
+      "esp:D5",
+      "green",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "usc1:ECHO",
+      "esp:D18",
+      "blue",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "usc1:VCC",
+      "esp:3V3",
+      "red",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "usc1:GND",
+      "esp:GND.1",
+      "black",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "usc2:TRIG",
+      "esp:D4",
+      "green",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "usc2:ECHO",
+      "esp:D19",
+      "blue",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "usc2:VCC",
+      "esp:3V3",
+      "red",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "usc2:GND",
+      "esp:GND.1",
+      "black",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "usc3:TRIG",
+      "esp:D2",
+      "green",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "usc3:ECHO",
+      "esp:D21",
+      "blue",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "usc3:VCC",
+      "esp:3V3",
+      "red",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "usc3:GND",
+      "esp:GND.1",
+      "black",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "usc4:TRIG",
+      "esp:D15",
+      "green",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "usc4:ECHO",
+      "esp:D22",
+      "blue",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "usc4:VCC",
+      "esp:3V3",
+      "red",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "usc4:GND",
+      "esp:GND.1",
+      "black",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "usc5:TRIG",
+      "esp:D13",
+      "green",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "usc5:ECHO",
+      "esp:D23",
+      "blue",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "usc5:VCC",
+      "esp:3V3",
+      "red",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "usc5:GND",
+      "esp:GND.1",
+      "black",
+      [
+        "v0"
+      ]
+    ]
+  ]
+}
