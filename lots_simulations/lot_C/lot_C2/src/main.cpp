@@ -36,7 +36,13 @@ float medirDistancia(int trig, int echo)
 
 char *analisarStatus(float d)
 {
+<<<<<<< HEAD
   if (d < 20)
+=======
+  if (d < 0)
+    return "null";
+  else if (d < 20)
+>>>>>>> 54b54281e4ace5dc97fa92fdf434231984156f4e
     return "Occupied";
   else
     return "Available";
@@ -53,11 +59,19 @@ String buildJSON()
   d[4] = medirDistancia(TRIG5, ECHO5);
   d[5] = medirDistancia(TRIG6, ECHO6);
 
+<<<<<<< HEAD
   String json = "{\n  \"titulo\": \"AREA B1\",\n  \"sensores\": [\n";
   for (int i = 0; i < 6; i++)
   {
     json += "    { \"id\": \"usc" + String(i + 1) + "\", \"distancia_cm\": ";
     json += (d[i] < 0 ? "null" : String(d[i], 1));
+=======
+  String json = "{\n  \"titulo\": \"AREA C2\",\n  \"sensores\": [\n";
+  for (int i = 0; i < 6; i++)
+  {
+    json += "    { \"id\": \"usc" + String(i + 1) + "\", \"status\": ";
+    json += (d[i] < 0 ? "null" : String("\"") + analisarStatus(d[i]) + "\"");
+>>>>>>> 54b54281e4ace5dc97fa92fdf434231984156f4e
     json += (i < 5 ? " },\n" : " }\n");
   }
   json += "  ]\n}";
