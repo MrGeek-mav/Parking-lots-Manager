@@ -28,8 +28,11 @@ func UpdateLotStatus(w http.ResponseWriter, r *http.Request) {
 
 func GetLots(w http.ResponseWriter, r *http.Request) {
 
+	status := r.URL.Query().Get("status")
+
 	var lots []model.Lot
-	result := instance.DB.Find(&lots).Where("Status = ?", "Available")
+
+	result := instance.DB.Find(&lots).Where("Status = ?", status)
 	if result.Error != nil {
 		http.Error(w, "Failed to retrieve lots", http.StatusInternalServerError)
 		return
@@ -37,4 +40,11 @@ func GetLots(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(lots)
+}
+
+func GetLotFromSimulation(w http.ResponseWriter, r *http.Request) {
+
+	urlset := os.Getenv("GATEWAYS_URLS")
+	urls := strings.Split(urlset, ",")
+
 }
