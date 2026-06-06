@@ -1,9 +1,9 @@
 package model
 
-type lotStatus int
+type LotStatus int
 
 const (
-	Available lotStatus = iota
+	Available LotStatus = iota
 	Occupied
 	Reserved
 )

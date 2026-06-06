@@ -1,6 +1,7 @@
 package instance
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/MrGeek-mav/Parking-lots-Manager/model"
@@ -19,8 +20,10 @@ func Connect() {
 }
 
 func Migrate() {
-	err := DB.AutoMigrate(&model.User{}, &model.Lot{})
+	err := DB.AutoMigrate(&model.User{})
 	if err != nil {
 		log.Fatal("Failed to migrate database:", err)
 	}
+
+	fmt.Println("Database migrated successfully")
 }

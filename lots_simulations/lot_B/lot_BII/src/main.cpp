@@ -17,6 +17,7 @@
 
 const char *ssid = "Wokwi-GUEST";
 const char *password = "";
+const char *names[] = {"B7", "B8", "B9", "B10", "B11", "B12"};
 
 WebServer server(80);
 
@@ -34,15 +35,11 @@ float medirDistancia(int trig, int echo)
   return duration * 0.034 / 2.0;
 }
 
-char *analisarStatus(float d)
+String analisarStatus(float d)
 {
-<<<<<<< HEAD
-  if (d < 20)
-=======
   if (d < 0)
     return "null";
-  else if (d < 20)
->>>>>>> 54b54281e4ace5dc97fa92fdf434231984156f4e
+  else if (d < 40)
     return "Occupied";
   else
     return "Available";
@@ -51,6 +48,7 @@ char *analisarStatus(float d)
 // ── JSON ─────────────────────────────────────────────────────
 String buildJSON()
 {
+
   float d[6];
   d[0] = medirDistancia(TRIG1, ECHO1);
   d[1] = medirDistancia(TRIG2, ECHO2);
@@ -59,21 +57,27 @@ String buildJSON()
   d[4] = medirDistancia(TRIG5, ECHO5);
   d[5] = medirDistancia(TRIG6, ECHO6);
 
-<<<<<<< HEAD
-  String json = "{\n  \"titulo\": \"AREA B1\",\n  \"sensores\": [\n";
+  String json = "{\n  \"titulo\": \"AREA BII\",\n  \"sensores\": [\n";
+
   for (int i = 0; i < 6; i++)
   {
-    json += "    { \"id\": \"usc" + String(i + 1) + "\", \"distancia_cm\": ";
-    json += (d[i] < 0 ? "null" : String(d[i], 1));
-=======
-  String json = "{\n  \"titulo\": \"AREA C2\",\n  \"sensores\": [\n";
-  for (int i = 0; i < 6; i++)
-  {
-    json += "    { \"id\": \"usc" + String(i + 1) + "\", \"status\": ";
-    json += (d[i] < 0 ? "null" : String("\"") + analisarStatus(d[i]) + "\"");
->>>>>>> 54b54281e4ace5dc97fa92fdf434231984156f4e
+    // Forçamos o início da linha a ser String() para que o operador + funcione com todo o resto
+    json += String("    { \"name\": \"") + names[i] + "\", \"status\": ";
+
+    // Simplificando a validação do status baseando-se no retorno da função corrigida
+    if (d[i] < 0)
+    {
+      json += "\"null\"";
+    }
+    else
+    {
+      json += "\"" + analisarStatus(d[i]) + "\"";
+    }
+
+    // Adiciona a vírgula de separação dos objetos do JSON, exceto no último item
     json += (i < 5 ? " },\n" : " }\n");
   }
+
   json += "  ]\n}";
   return json;
 }
@@ -130,4 +134,5 @@ void setup()
 void loop()
 {
   server.handleClient();
+  delay(500);
 }

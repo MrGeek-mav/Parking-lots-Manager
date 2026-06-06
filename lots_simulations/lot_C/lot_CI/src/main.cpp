@@ -15,6 +15,7 @@
 
 const char *ssid = "Wokwi-GUEST";
 const char *password = "";
+const char *names[] = {"C1", "C2", "C3", "C4", "C5"};
 
 WebServer server(80);
 
@@ -32,11 +33,11 @@ float medirDistancia(int trig, int echo)
   return duration * 0.034 / 2.0;
 }
 
-char *analisarStatus(float d)
+String analisarStatus(float d)
 {
   if (d < 0)
     return "null";
-  else if (d < 20)
+  else if (d < 40)
     return "Occupied";
   else
     return "Available";
@@ -45,20 +46,35 @@ char *analisarStatus(float d)
 // ── JSON ─────────────────────────────────────────────────────
 String buildJSON()
 {
-  float d[5];
+
+  float d[6];
   d[0] = medirDistancia(TRIG1, ECHO1);
   d[1] = medirDistancia(TRIG2, ECHO2);
   d[2] = medirDistancia(TRIG3, ECHO3);
   d[3] = medirDistancia(TRIG4, ECHO4);
   d[4] = medirDistancia(TRIG5, ECHO5);
 
-  String json = "{\n  \"titulo\": \"AREA B3\",\n  \"sensores\": [\n";
+  String json = "{\n  \"titulo\": \"AREA CI\",\n  \"sensores\": [\n";
+
   for (int i = 0; i < 5; i++)
   {
-    json += "    { \"id\": \"usc" + String(i + 1) + "\", \"status\": ";
-    json += (d[i] < 0 ? "null" : String("\"") + analisarStatus(d[i]) + "\"");
+    // Forçamos o início da linha a ser String() para que o operador + funcione com todo o resto
+    json += String("    { \"name\": \"") + names[i] + "\", \"status\": ";
+
+    // Simplificando a validação do status baseando-se no retorno da função corrigida
+    if (d[i] < 0)
+    {
+      json += "\"null\"";
+    }
+    else
+    {
+      json += "\"" + analisarStatus(d[i]) + "\"";
+    }
+
+    // Adiciona a vírgula de separação dos objetos do JSON, exceto no último item
     json += (i < 4 ? " },\n" : " }\n");
   }
+
   json += "  ]\n}";
   return json;
 }

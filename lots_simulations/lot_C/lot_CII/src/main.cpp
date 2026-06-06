@@ -17,6 +17,7 @@
 
 const char *ssid = "Wokwi-GUEST";
 const char *password = "";
+const char *names[] = {"C6", "C7", "C8", "C9", "C10", "C11"};
 
 WebServer server(80);
 
@@ -34,11 +35,11 @@ float medirDistancia(int trig, int echo)
   return duration * 0.034 / 2.0;
 }
 
-char *analisarStatus(float d)
+String analisarStatus(float d)
 {
   if (d < 0)
     return "null";
-  else if (d < 20)
+  else if (d < 40)
     return "Occupied";
   else
     return "Available";
@@ -55,13 +56,24 @@ String buildJSON()
   d[4] = medirDistancia(TRIG5, ECHO5);
   d[5] = medirDistancia(TRIG6, ECHO6);
 
-  String json = "{\n  \"titulo\": \"AREA B1\",\n  \"sensores\": [\n";
+  String json = "{\n  \"titulo\": \"AREA BI\",\n  \"sensores\": [\n";
+
   for (int i = 0; i < 6; i++)
   {
-    json += "    { \"id\": \"usc" + String(i + 1) + "\", \"status\": ";
-    json += (d[i] < 0 ? "null" : String("\"") + analisarStatus(d[i]) + "\"");
+    json += String("    { \"name\": \"") + names[i] + "\", \"status\": ";
+
+    if (d[i] < 0)
+    {
+      json += "\"null\"";
+    }
+    else
+    {
+      json += "\"" + analisarStatus(d[i]) + "\"";
+    }
+
     json += (i < 5 ? " },\n" : " }\n");
   }
+
   json += "  ]\n}";
   return json;
 }

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ParkSense WSN — Sistema Inteligente de Estacionamento</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- =================== LOGIN =================== -->
+<div id="screen-login" class="screen active">
+  <div class="auth-right">
+    <div class="auth-box">
+
+      <div class="logo-mark">
+        <div class="logo-icon">PS</div>
+        <div>
+          <div class="logo-text">Park<span>Sense</span></div>
+          <div class="logo-sub">WSN SYSTEM v2.1</div>
+        </div>
+      </div>
+
+      <div class="auth-title">Bem-vindo ao ParkSense</div>
+      <div class="auth-sub">Encontre, reserve e acompanhe vagas de estacionamento de forma simples.</div>
+
+      <div class="form-group">
+        <label class="form-label">Login</label>
+        <input type="text" id="login-email" class="form-input" placeholder="amade@parksense.mz">
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label">Senha</label>
+        <input type="password" id="login-pass" class="form-input" placeholder="••••••••">
+      </div>
+
+      <button class="btn-primary" onclick="doLogin()">ENTRAR NO SISTEMA</button>
+
+      <!-- Link de criar conta removido - apenas admin pode criar usuários -->
+
+      <div class="wsn-status">
+        <div class="wsn-dot"></div>
+        <span class="wsn-text">GATEWAY WSN ONLINE — 24/24 sensores operacionais</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- =================== MAIN APP =================== -->
+<div id="screen-app" class="screen">
+
+  <nav class="navbar">
+    <div class="nav-brand">
+      <div class="dot"></div>
+      Park<span>Sense</span>
+    </div>
+    <div class="nav-right" id="nav-right-container"></div>
+  </nav>
+
+  <div class="app-wrapper">
+    <aside class="sidebar" id="sidebar">
+      <div id="menu-admin" class="sidebar-section">
+        <div class="sidebar-label">Administrador</div>
+        <div class="nav-item" onclick="showPage('dashboard')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          Dashboard
+        </div>
+        <div class="nav-item" onclick="showPage('vagas-admin')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 12h8M12 8v8"/></svg>
+          Gestão de Vagas
+        </div>
+        <div class="nav-item" onclick="showPage('utilizadores')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Utilizadores
+        </div>
+        <div class="nav-item" onclick="showPage('sensores')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2a10 10 0 1 0 0 20"/><path d="M12 6a6 6 0 1 0 0 12"/><path d="M12 10a2 2 0 1 0 0 4"/><path d="M20 2l2 2-2 2"/></svg>
+          Sensores WSN
+        </div>
+      </div>
+
+      <div id="menu-user" class="sidebar-section" style="display:none;">
+        <div class="sidebar-label">Utilizador</div>
+        <div class="nav-item" onclick="showPage('vagas-user')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 12h8M12 8v8"/></svg>
+          Ver Vagas
+        </div>
+        <div class="nav-item" onclick="showPage('minhas-reservas')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
+          Minhas Reservas
+        </div>
+      </div>
+
+      <div class="sidebar-section" style="margin-top:auto;padding-top:20px;">
+        <div class="sidebar-label">Sistema</div>
+        <div class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+          WSN Online
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+
+      <!-- DASHBOARD -->
+      <div id="page-dashboard" class="page">
+        <div class="page-header">
+          <div class="page-title">Dashboard</div>
+          <div class="page-sub">Visão geral do sistema em tempo real — atualizado via WSN</div>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card green">
+            <div class="stat-label">Vagas Livres</div>
+            <div class="stat-value green" id="dash-livres">0</div>
+            <div class="stat-meta">de 24 vagas totais</div>
+          </div>
+          <div class="stat-card red">
+            <div class="stat-label">Vagas Ocupadas</div>
+            <div class="stat-value red" id="dash-ocupadas">0</div>
+            <div class="stat-meta">em uso agora</div>
+          </div>
+          <div class="stat-card yellow">
+            <div class="stat-label">Reservadas</div>
+            <div class="stat-value yellow" id="dash-reservadas">0</div>
+            <div class="stat-meta">aguardando chegada</div>
+          </div>
+          <div class="stat-card cyan">
+            <div class="stat-label">Ocupação</div>
+            <div class="stat-value cyan" id="dash-pct">0%</div>
+            <div class="progress-bar"><div class="progress-fill cyan" id="dash-bar" style="width:0%"></div></div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+          <div class="card-section">
+            <div class="card-section-title"> Ocupação por Hora</div>
+            <div class="chart-container">
+              <div class="bar-chart" id="bar-chart"></div>
+            </div>
+          </div>
+          <div class="card-section">
+            <div class="card-section-title"> Distribuição Atual</div>
+            <div class="donut-wrap">
+              <canvas id="donut-canvas" width="140" height="140"></canvas>
+              <div class="donut-legend">
+                <div class="donut-item"><div class="donut-swatch" style="background:var(--green)"></div>Livres — <span id="legend-livres">0</span> (<span id="legend-pct-livres">0</span>%)</div>
+                <div class="donut-item"><div class="donut-swatch" style="background:var(--red)"></div>Ocupadas — <span id="legend-ocupadas">0</span> (<span id="legend-pct-ocupadas">0</span>%)</div>
+                <div class="donut-item"><div class="donut-swatch" style="background:var(--yellow)"></div>Reservadas — <span id="legend-reservadas">0</span> (<span id="legend-pct-reservadas">0</span>%)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div class="card-section">
+            <div class="card-section-title"> Vagas Mais Utilizadas</div>
+            <table class="data-table">
+              <thead><tr><th>Vaga</th><th>Ocupações</th><th>Horas</th></tr></thead>
+              <tbody id="vagas-mais-usadas-body">
+                <tr><td colspan="3" style="text-align:center;">Carregando...</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card-section">
+  <div class="card-section-title"> Utilizadores Mais Ativos</div>
+  <div class="user-list-container" id="utilizadores-ativos-container">
+    <div style="text-align:center;padding:20px;color:var(--text3);">Carregando estatísticas...</div>
+  </div>
+  <div class="divider"></div>
+  <div style="font-size:12px;color:var(--text3);">Tempo médio de ocupação: <span id="tempo-medio-geral" style="color:var(--cyan);font-family:var(--font-mono);">--</span></div>
+</div>
+        </div>
+      </div>
+
+      <!-- VAGAS ADMIN -->
+      <div id="page-vagas-admin" class="page">
+        <div class="page-header">
+          <div class="page-title">Gestão de Vagas</div>
+          <div class="page-sub">Monitorize, reserve e gerencie todas as vagas do parque</div>
+        </div>
+        <div class="action-row">
+          <button class="btn-action success" onclick="openReservarModal()"> Reservar por ID</button>
+          <button class="btn-action danger" onclick="openCancelarModal()"> Cancelar Reserva</button>
+          <button class="btn-action" onclick="refreshSlots()"> Atualizar Sensores</button>
+        </div>
+        <div class="filter-bar">
+          <button class="filter-btn active" onclick="filterSlots('all',this)">Todas (24)</button>
+          <button class="filter-btn" onclick="filterSlots('livre',this)">🟢 Livres</button>
+          <button class="filter-btn" onclick="filterSlots('ocupada',this)">🔴 Ocupadas</button>
+          <button class="filter-btn" onclick="filterSlots('reservada',this)">🟡 Reservadas</button>
+          <input type="text" class="search-input" placeholder="🔍 Pesquisar por ID..." oninput="searchSlot(this.value)">
+        </div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot green"></div>Livre</div>
+          <div class="legend-item"><div class="legend-dot red"></div>Ocupada</div>
+          <div class="legend-item"><div class="legend-dot yellow"></div>Reservada</div>
+        </div>
+        <div class="parking-grid" id="admin-parking-grid"></div>
+      </div>
+
+      <!-- UTILIZADORES -->
+      <div id="page-utilizadores" class="page">
+        <div class="page-header">
+          <div class="page-title">Utilizadores</div>
+          <div class="page-sub">Gerencie contas do sistema</div>
+        </div>
+        <div class="tabs">
+          <button class="tab-btn active" onclick="switchTab('tab-list',this)">Lista de Utilizadores</button>
+          <button class="tab-btn" onclick="switchTab('tab-novo',this)"> Criar Utilizador</button>
+        </div>
+        <div id="tab-list">
+          <div class="card-section">
+            <div class="card-section-title"> Utilizadores Registados</div>
+            <table class="data-table">
+              <thead><tr><th>Nome</th><th>Email</th><th>Tipo</th><th>Estado</th><th>Reservas</th><th>Ação</th></tr></thead>
+              <tbody id="users-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+        <div id="tab-novo" style="display:none;">
+          <div class="card-section" style="max-width:480px;">
+            <div class="card-section-title"> Criar Conta de Utilizador</div>
+            <div class="form-group"><label class="form-label">Nome Completo</label><input type="text" id="novo-nome" class="form-input" placeholder="Nome do utilizador"></div>
+            <div class="form-group"><label class="form-label">Email</label><input type="email" id="novo-email" class="form-input" placeholder="email@exemplo.mz"></div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">Senha</label><input type="password" id="novo-senha" class="form-input" placeholder="••••••••"></div>
+              <div class="form-group"><label class="form-label">Confirmar</label><input type="password" id="novo-confirmar" class="form-input" placeholder="••••••••"></div>
+            </div>
+            <button class="btn-primary" onclick="adicionarUtilizador()">CRIAR UTILIZADOR</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SENSORES -->
+      <div id="page-sensores" class="page">
+        <div class="page-header">
+          <div class="page-title">Sensores WSN</div>
+          <div class="page-sub">Rede de Sensores Sem Fio — IEEE 802.15.4 / ZigBee</div>
+        </div>
+        <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);">
+          <div class="stat-card green"><div class="stat-label">Sensores Online</div><div class="stat-value green">24</div></div>
+          <div class="stat-card cyan"><div class="stat-label">Gateway</div><div class="stat-value cyan" style="font-size:20px;">Online</div></div>
+          <div class="stat-card cyan"><div class="stat-label">Protocolo</div><div class="stat-value cyan" style="font-size:16px;">802.15.4</div></div>
+          <div class="stat-card yellow"><div class="stat-label">Frequência</div><div class="stat-value yellow" style="font-size:20px;">2.4GHz</div></div>
+        </div>
+        <div class="card-section">
+          <div class="card-section-title">📡 Topologia da Rede</div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;">
+            <div style="text-align:center;padding:12px;background:var(--bg2);border:1px solid var(--cyan);border-radius:var(--radius);">
+              <div style="font-size:24px;">🌐</div>
+              <div style="font-size:11px;color:var(--cyan);">GATEWAY</div>
+            </div>
+            <div style="display:flex;align-items:center;color:var(--border2);">→</div>
+            <div style="display:grid;grid-template-columns:repeat(4,80px);gap:8px;">
+              <div style="text-align:center;padding:8px;background:var(--bg2);border:1px solid var(--green);border-radius:var(--radius);"><div>📡</div><div style="font-size:10px;">A-01</div></div>
+              <div style="text-align:center;padding:8px;background:var(--bg2);border:1px solid var(--red);border-radius:var(--radius);"><div>📡</div><div style="font-size:10px;">A-02</div></div>
+              <div style="text-align:center;padding:8px;background:var(--bg2);border:1px solid var(--green);border-radius:var(--radius);"><div>📡</div><div style="font-size:10px;">A-03</div></div>
+              <div style="text-align:center;padding:8px;background:var(--bg2);border:1px solid var(--yellow);border-radius:var(--radius);"><div>📡</div><div style="font-size:10px;">A-04</div></div>
+            </div>
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:var(--text3);">+ 20 sensores adicionais nas zonas C, D, E, F. Todos operacionais.</div>
+        </div>
+        <div class="card-section">
+          <div class="card-section-title">📋 Log de Eventos</div>
+          <div id="sensor-log-container" style="font-family:var(--font-mono);font-size:12px;color:var(--text2);line-height:2;"></div>
+        </div>
+      </div>
+
+      <!-- VAGAS USER -->
+      <div id="page-vagas-user" class="page">
+        <div class="welcome-banner">
+          <div>
+            <div class="welcome-text" id="user-welcome">Bem-vindo ao ParkSense </div>
+            <div class="welcome-sub">Visualize as vagas disponíveis e faça a sua reserva</div>
+          </div>
+          <div class="live-indicator"><div class="live-dot"></div>TEMPO REAL</div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card green">
+            <div class="stat-label">Vagas Livres</div>
+            <div class="stat-value green" id="user-livres">0</div>
+          </div>
+          <div class="stat-card red">
+            <div class="stat-label">Ocupadas</div>
+            <div class="stat-value red" id="user-ocupadas">0</div>
+          </div>
+          <div class="stat-card yellow">
+            <div class="stat-label">Reservadas</div>
+            <div class="stat-value yellow" id="user-reservadas">0</div>
+          </div>
+        </div>
+
+        <div class="filter-bar">
+          <button class="filter-btn active" onclick="filterSlots('all',this,'user')">Todas</button>
+          <button class="filter-btn" onclick="filterSlots('livre',this,'user')">🟢 Disponíveis</button>
+          <button class="filter-btn" onclick="filterSlots('ocupada',this,'user')">🔴 Ocupadas</button>
+          <button class="filter-btn" onclick="filterSlots('reservada',this,'user')">🟡 Reservadas</button>
+        </div>
+
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot green"></div>Livre — clique para reservar</div>
+          <div class="legend-item"><div class="legend-dot red"></div>Ocupada — indisponível</div>
+          <div class="legend-item"><div class="legend-dot yellow"></div>Reservada</div>
+        </div>
+
+        <div class="parking-grid" id="user-parking-grid"></div>
+      </div>
+
+      <!-- MINHAS RESERVAS -->
+      <div id="page-minhas-reservas" class="page">
+        <div class="page-header">
+          <div class="page-title">Minhas Reservas</div>
+          <div class="page-sub">Gerencie as suas reservas activas</div>
+        </div>
+        <div class="card-section">
+          <div class="card-section-title">📋 Reservas Ativas</div>
+          <div id="user-reservas-list"></div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- MODAIS -->
+<div class="modal-overlay" id="modal-reservar">
+  <div class="modal">
+    <div class="modal-title">➕ Reservar Vaga</div>
+    <div class="form-group"><label class="form-label">ID da Vaga</label><input type="text" class="form-input" id="reservar-id" placeholder="Ex: A-03"></div>
+    <div class="form-group"><label class="form-label">Tempo de Reserva</label><select class="select-input" id="reservar-tempo"><option>30 minutos</option><option>1 hora</option><option>2 horas</option><option>4 horas</option></select></div>
+    <div class="modal-actions"><button class="btn-cancel" onclick="closeModal('modal-reservar')">Cancelar</button><button class="btn-confirm" onclick="confirmarReserva()">Confirmar</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-cancelar">
+  <div class="modal">
+    <div class="modal-title">❌ Cancelar Reserva</div>
+    <div class="form-group"><label class="form-label">ID da Vaga</label><input type="text" class="form-input" id="cancelar-id" placeholder="Ex: B-07"></div>
+    <div class="modal-actions"><button class="btn-cancel" onclick="closeModal('modal-cancelar')">Voltar</button><button class="btn-confirm" style="background:var(--red);" onclick="confirmarCancelamento()">Cancelar Reserva</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-reservar-user">
+  <div class="modal">
+    <div class="modal-title" id="modal-user-title">🅿️ Reservar Vaga</div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:16px;" id="modal-user-info">Confirme a reserva desta vaga.</div>
+    <div class="form-group"><label class="form-label">Tempo de Reserva</label><select class="select-input" id="user-reservar-tempo"><option>30 minutos</option><option>1 hora</option><option>2 horas</option></select></div>
+    <div class="modal-actions"><button class="btn-cancel" onclick="closeModal('modal-reservar-user')">Cancelar</button><button class="btn-confirm" onclick="confirmarReservaUser()">Reservar</button></div>
+  </div>
+</div>
+
+<div class="notification" id="notification"></div>
+
+<script src="script.js"></script>
+</body>
+</html> 
+<!-- novo html-->
